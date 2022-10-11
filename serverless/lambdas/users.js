@@ -38,7 +38,6 @@ async function getUser(id) {
 
 async function getAllUsers(context) {
     await sequelize.sync();
-    //return await User.findAll()
     let organizationId = 1
     return await User.findAll({ where: { organizationId } })
 }

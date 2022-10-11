@@ -1,5 +1,5 @@
 import renderer from 'react-test-renderer';
-import LogIn from '../src/views/AdminAccount/AdminAccount.js';
+import LogIn from '../src/views/Auth/LogIn.js';
 
 it('changes the class when hovered', () => {
   const component = renderer.create(

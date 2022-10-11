@@ -9,12 +9,8 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            const { User, Organization, Zone } = models
+            const { User, Organization } = models
             Organization.hasMany(User, {
-               foreignKey: 'organizationId',
-               sourceKey: 'id',
-            })
-            Organization.hasMany(Zone, {
                foreignKey: 'organizationId',
                sourceKey: 'id',
             })

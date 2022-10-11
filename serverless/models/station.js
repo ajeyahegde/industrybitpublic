@@ -9,11 +9,7 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            const { Zone, Organization, Station } = models
-            Station.belongsTo(Zone, {
-               foreignKey: 'zoneId',
-               as: 'zone',
-            })
+            const { Organization, Station } = models
         }
     }
     Station.init(
