@@ -1,0 +1,8 @@
+node_modules
+127.0.0.1
+client/build
+.env
+.DS_Store
+.envrc
+database.sqlite
+test-results.json

@@ -1,0 +1,72 @@
+service: industrybit-api
+
+provider:
+    name: aws
+    region: us-east-1
+    stage: dev
+    httpApi:
+        cors:
+            allowedOrigins:
+                - https://industrybit.com
+            allowedHeaders:
+                - Content-Type
+                - Authorization
+            allowedMethods:
+                - GET
+                - POST
+                - PUT
+                - DELETE
+            allowCredentials: true
+    memorySize: 256
+    runtime: nodejs14.x
+    iam:
+        role: LambdaRole
+    environment:
+        NODE_ENV: production
+custom:
+    serverless-offline:
+        httpPort: 4000
+
+
+plugins:
+    - serverless-dotenv-plugin
+    - serverless-pseudo-parameters
+    - serverless-offline
+
+functions:
+    authorization:
+        handler: lambdas/auth.handler
+        events:
+            - httpApi:
+                  path: /api/auth/token
+                  method: post
+    users:
+        handler: lambdas/users.usersHandler
+        events:
+            - httpApi:
+                  path: /api/users
+                  method: get
+            - httpApi:
+                  path: /api/users/{id}
+                  method: get
+            - httpApi:
+                  path: /api/users
+                  method: post
+    exports:
+        handler: lambdas/measurementExports.measurementExportsHandler
+        events:
+            - httpApi:
+                  path: /api/exports
+                  method: post
+    organizations:
+        handler: lambdas/organizations.organizationsHandler
+        events:
+            - httpApi:
+                  path: /api/organizations
+                  method: get
+            - httpApi:
+                  path: /api/organizations/{id}
+                  method: get
+            - httpApi:
+                  path: /api/organizations
+                  method: post

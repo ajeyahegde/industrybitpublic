@@ -1,0 +1,30 @@
+{
+    "name": "lambdas",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "node ./node_modules/jest/bin/jest.js ",
+        "start": "node ./node_modules/serverless/bin/serverless.js offline"
+    },
+    "jest": {
+        "testResultsProcessor": "./node_modules/jest-json-reporter"
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "aws-sdk": "^2.1073.0",
+        "sequelize-cli": "^6.4.1",
+        "serverless-dotenv-plugin": "^3.11.1",
+        "serverless-offline": "^8.5.0",
+        "serverless-pseudo-parameters": "^2.6.1"
+    },
+    "dependencies": {
+        "jest": "^29.1.2",
+        "jest-json-reporter": "^1.2.2",
+        "json2csv": "^5.0.7",
+        "jsonwebtoken": "^8.5.1",
+        "sequelize": "^6.24.0",
+        "sqlite3": "^5.1.2"
+    }
+}
