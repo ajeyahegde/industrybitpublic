@@ -1,9 +1,5 @@
 name: DevMatchTests
 on:
-  #push:
-  #  branches: [ main, master ]
-  #pull_request:
-  #  branches: [ main, master ]
   workflow_dispatch:
    inputs:
       userRepo:
@@ -21,6 +17,10 @@ jobs:
     - uses: actions/setup-node@v2
       with:
         node-version: '18.x'
+    # Now we overlay the user repo on top of the original repo
+    # Save the original HEAD so that we can generated a diff later
+    - run: git rev-parse HEAD > ORIGINAL_HEAD_COMMIT
+      if: github.event.inputs.userRepo != ''
     - run: echo "Repo to pull from ${{ github.event.inputs.userRepo }}"
       if: github.event.inputs.userRepo != ''
     - run: git remote add devmatch ${{ github.event.inputs.userRepo }}
@@ -28,6 +28,8 @@ jobs:
     - run: git fetch --all
       if: github.event.inputs.userRepo != ''
     - run: git pull --rebase devmatch main
+      if: github.event.inputs.userRepo != ''
+    - run:  cat ORIGINAL_HEAD_COMMIT | git diff `xargs` > CODE_DIFF.DIFF
       if: github.event.inputs.userRepo != ''
     - name: Install dependencies with clean install
       run: npm ci
@@ -40,6 +42,11 @@ jobs:
       with:
         name: test-results
         path: serverless/test-results.json
+    - uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: code-diff
+        path: CODE_DIFF.DIFF
   # frontend:
   #   timeout-minutes: 5
   #   runs-on: ubuntu-latest
