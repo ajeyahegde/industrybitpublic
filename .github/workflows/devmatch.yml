@@ -29,8 +29,10 @@ jobs:
       if: github.event.inputs.userRepo != ''
     - run: git pull --rebase devmatch main
       if: github.event.inputs.userRepo != ''
+    # Save the code DIFF somewhere
     - run:  cat ORIGINAL_HEAD_COMMIT | git diff `xargs` > CODE_DIFF.DIFF
       if: github.event.inputs.userRepo != ''
+    # Now start the actual test
     - name: Install dependencies with clean install
       run: npm ci
       working-directory: serverless
@@ -51,10 +53,26 @@ jobs:
     timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
+    - name: devMatchSubmissionId:${{ inputs.devMatchSubmissionId }}
+      if: github.event.inputs.devMatchSubmissionId != ''
+      run: echo devmatch identifier is ${{ inputs.devMatchSubmissionId }}
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v2
       with:
         node-version: '18.x'
+    # Now we overlay the user repo on top of the original repo
+    # Save the original HEAD so that we can generated a diff later
+    - run: git rev-parse HEAD > ORIGINAL_HEAD_COMMIT
+      if: github.event.inputs.userRepo != ''
+    - run: echo "Repo to pull from ${{ github.event.inputs.userRepo }}"
+      if: github.event.inputs.userRepo != ''
+    - run: git remote add devmatch ${{ github.event.inputs.userRepo }}
+      if: github.event.inputs.userRepo != ''
+    - run: git fetch --all
+      if: github.event.inputs.userRepo != ''
+    - run: git pull --rebase devmatch main
+      if: github.event.inputs.userRepo != ''
+    # Now start the actual test
     - name: Install dependencies with clean install
       run: npm ci
       working-directory: client
