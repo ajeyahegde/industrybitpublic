@@ -10,6 +10,13 @@ async function usersHandler(event, context) {
                 statusCode: 200,
                 body: JSON.stringify(await getAllUsers()),
             }
+
+        case 'GET /api/admins':
+            return {
+                statusCode: 200,
+                body: JSON.stringify(await getAdmins()),
+            }
+    
         case 'GET /api/users/{id}':
             return {
                 statusCode: 200,
@@ -45,6 +52,20 @@ async function getAllUsers(context) {
     await sequelize.sync();
     let organizationId = 1
     return await User.findAll({ where: { organizationId } })
+}
+
+async function getUsers(context) {
+    await sequelize.sync();
+    let organizationId = 1
+    let role = 'user'
+    return await User.findAll({ where: { organizationId: organizationId, role: role} })    
+}
+
+async function getAdmins(context) {
+    await sequelize.sync();
+    let organizationId = 1
+    let role = 'admin'
+    return await User.findAll({ where: { organizationId: organizationId, role: role} })
 }
 
 async function createUser(event, context) {
